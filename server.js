@@ -20,7 +20,7 @@ app.use(passport.session());
 
 myDB(async client => {
   const myDataBase = await client.db('database').collection('users');
-
+  
   // Be sure to change the title
   app.route('/').get((req, res) => {
     //Change the response to render the Pug template
@@ -40,7 +40,7 @@ myDB(async client => {
       done(null, doc);
      });
   });
-  
+
   // Be sure to add this...
 }).catch(e => {
   app.route('/').get((req, res) => {
@@ -56,9 +56,9 @@ app.use('/public', express.static(process.cwd() + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.route('/').get((req, res) => {
-  res.render(process.cwd() + '/views/pug/index.pug', {title: 'Hello', message: 'Please login'});
-});
+// app.route('/').get((req, res) => {
+//   res.render(process.cwd() + '/views/pug/index.pug', {title: 'Hello', message: 'Please login'});
+// });
 
 
 
