@@ -7,6 +7,7 @@ const myDB = require('./connection');
 const fccTesting = require('./freeCodeCamp/fcctesting.js');
 const pug = require('pug');
 const app = express();
+const ObjectID = require('mongodb').ObjectID;
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -32,6 +33,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('Listening on port ' + PORT);
 });
+
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
