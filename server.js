@@ -36,7 +36,7 @@ myDB(async client => {
   // Be sure to change the title
   app.route('/').get((req, res) => {
     //Change the response to render the Pug template
-    res.render('pug', {
+    res.render(process.cwd() + '/views/pug/index.pug', {
       title: 'Connected to Database',
       message: 'Please login'
     });
@@ -47,7 +47,7 @@ myDB(async client => {
   // Be sure to add this...
 }).catch(e => {
   app.route('/').get((req, res) => {
-    res.render('pug', { title: e, message: 'Unable to login' });
+    res.render(process.cwd() + '/views/pug/index.pug', { title: e, message: 'Unable to login' });
   });
 });
 // app.listen out here...
