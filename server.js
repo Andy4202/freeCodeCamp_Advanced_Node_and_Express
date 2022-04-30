@@ -18,18 +18,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.set('view engine', 'pug');
-
-fccTesting(app); //For FCC testing purposes
-app.use('/public', express.static(process.cwd() + '/public'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.route('/').get((req, res) => {
-  res.render(process.cwd() + '/views/pug/index.pug', {title: 'Hello', message: 'Please login'});
-});
-
-
 myDB(async client => {
   const myDataBase = await client.db('database').collection('users');
 
@@ -43,7 +31,16 @@ myDB(async client => {
   });
 
   // Serialization and deserialization here...
-
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+  
+  passport.deserializeUser((id, done) => {
+    myDataBase.findOne({ _id: new ObjectID(id) }, (err, doc) => {
+      done(null, doc);
+     });
+  });
+  
   // Be sure to add this...
 }).catch(e => {
   app.route('/').get((req, res) => {
@@ -52,6 +49,19 @@ myDB(async client => {
 });
 // app.listen out here...
 
+app.set('view engine', 'pug');
+
+fccTesting(app); //For FCC testing purposes
+app.use('/public', express.static(process.cwd() + '/public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.route('/').get((req, res) => {
+  res.render(process.cwd() + '/views/pug/index.pug', {title: 'Hello', message: 'Please login'});
+});
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -59,12 +69,3 @@ app.listen(PORT, () => {
 });
 
 
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-
-passport.deserializeUser((id, done) => {
-  myDataBase.findOne({ _id: new ObjectID(id) }, (err, doc) => {
-    done(null, doc);
-   });
-});
